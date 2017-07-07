@@ -9,7 +9,7 @@ void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ATank* tank = GetControllerTank();
+	ATank* tank = GetControlledTank();
 	if (tank)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("SUPER::BEGINPLAY --- %s"), *tank->GetName());
@@ -27,22 +27,21 @@ void ATankPlayerController::Tick(float DeltaTime)
 	AimAtCrosshairs();
 }
 
-ATank* ATankPlayerController::GetControllerTank() const
+ATank* ATankPlayerController::GetControlledTank() const
 {
 	return Cast<ATank>(GetPawn());
 }
 
 void ATankPlayerController::AimAtCrosshairs()
 {
-	if (!GetControllerTank()) { return; }
+	if (!GetControlledTank()) { return; }
 
 	FVector HitLocation;	// Out parameter
 	
 	// if it hits landscape
 	if (GetSightRayHitLocation(HitLocation))	// "side-effect" Will Ray Trace
 	{
-		UE_LOG(LogTemp, Warning, TEXT("HitLocation: %s"), *HitLocation.ToString());
-
+		GetControlledTank()->AimAt(HitLocation);
 	}
 		// tell controlled tank to aim at this point
 }

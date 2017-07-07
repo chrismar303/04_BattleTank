@@ -15,7 +15,6 @@ ATank::ATank()
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -32,3 +31,7 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
+void ATank::AimAt(const FVector HitLocation) const
+{
+	UE_LOG(LogTemp, Warning, TEXT("%s AIMING AT %s"), *GetName(), *HitLocation.ToString());
+}

@@ -21,9 +21,22 @@ void ATankAIController::BeginPlay()
 	}
 }
 
+void ATankAIController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	// Check if Player Tank exist, Stop if it doesnt
+	ATank* PlayerTank = GetPlayerTank();
+	if (!PlayerTank)
+		return;
+	
+	// TODO Move Towards Player
 
+	// Aim Towards Player
+	PlayerTank->AimAt(GetPlayerTank()->GetActorLocation());
+	// Fire
+}
 
-ATank* ATankAIController::GetControllerTank() const
+ATank* ATankAIController::GetControlledTank() const
 {
 	return Cast<ATank>(GetPawn());
 }
@@ -32,9 +45,5 @@ ATank* ATankAIController::GetPlayerTank() const
 {
 	return Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
 }
-
-
-
-
 
 
