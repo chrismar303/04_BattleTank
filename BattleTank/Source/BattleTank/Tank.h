@@ -27,7 +27,11 @@ protected:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// Delegates aiming
 	UTankAimingComponent* TankAimingComponent = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = Firing)
+	float LaunchSpeed = 100000;	// TODO FIND Sensible Starting Value IN Meters per seconds
 
 private:	
 

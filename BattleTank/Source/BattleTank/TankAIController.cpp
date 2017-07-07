@@ -10,7 +10,7 @@ void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ATank* Tank = GetPlayerTank();
+	ATank* Tank = GetControlledTank();
 	if (Tank) 
 	{
 		UE_LOG(LogTemp, Warning, TEXT("AI CONTROLLER FOUND PLAYER CONTROLLER: %s"), *Tank->GetName()); 
@@ -32,7 +32,7 @@ void ATankAIController::Tick(float DeltaTime)
 	// TODO Move Towards Player
 
 	// Aim Towards Player
-	PlayerTank->AimAt(GetPlayerTank()->GetActorLocation());
+	GetControlledTank()->AimAt(GetPlayerTank()->GetActorLocation());
 	// Fire
 }
 
