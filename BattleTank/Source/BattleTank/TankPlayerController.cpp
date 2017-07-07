@@ -2,7 +2,8 @@
 
 #include "TankPlayerController.h"
 #include "GameFramework/Pawn.h"
-
+#include "Engine/World.h"
+#include "DrawDebugHelpers.h"
 
 void ATankPlayerController::BeginPlay()
 {
@@ -40,7 +41,7 @@ void ATankPlayerController::AimAtCrosshairs()
 	// if it hits landscape
 	if (GetSightRayHitLocation(HitLocation))	// "side-effect" Will Ray Trace
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("Look Direction: %s"), *HitLocation.ToString());
+		UE_LOG(LogTemp, Warning, TEXT("HitLocation: %s"), *HitLocation.ToString());
 
 	}
 		// tell controlled tank to aim at this point
@@ -55,9 +56,37 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) cons
 	FVector2D ScreenLocation(ViewportSizeX * CrossHairXLocation, ViewportSizeY * CrossHairYLocation);
 
 	// "De-project" screen position of cross hair to world direction
-	// Line-Trace along look direction, and see what we hit (up to max range)
+	FVector LookDirection;		// holds look direction
+	if (GetLookDirection(ScreenLocation, LookDirection))
+	{
+		// Line-Trace along LookDirection, and see what we hit (up to max range)
+		//UE_LOG(LogTemp, Warning, TEXT("LOCATION: %s"), *LookDirection.ToString());
+		GetLookVectorHitLocation(LookDirection, OutHitLocation);
+	}
 
-
-	OutHitLocation = FVector(1.0f);
 	return true;
+}
+
+
+bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const
+{
+	// "De-project" screen position of cross hair to world direction
+	FVector CameraLocation;	// temp variable needed for parameter
+	return DeprojectScreenPositionToWorld(ScreenLocation.X, ScreenLocation.Y, CameraLocation, LookDirection);
+}
+
+bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVector& HitLocation) const
+{
+	FHitResult HitResult;
+	FVector StartLocation = PlayerCameraManager->GetCameraLocation();
+	FVector EndLocation = StartLocation + (LookDirection * LineTraceRange);
+
+	if (GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility))
+	{
+		// Set Hit Location
+		HitLocation = HitResult.Location;
+		return true;
+	}
+	HitLocation = FVector(0);
+	return false;	// line traced failed
 }
