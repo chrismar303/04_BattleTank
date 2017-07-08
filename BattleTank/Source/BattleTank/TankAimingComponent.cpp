@@ -2,9 +2,11 @@
 
 #include "TankAimingComponent.h"
 #include "GameFramework/Actor.h"
+#include "GameFramework/Pawn.h"
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "TankBarrel.h"
+#include "TankTurret.h"
 #include "Engine/World.h"
 
 // Sets default values for this component's properties
@@ -20,10 +22,14 @@ void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
 	Barrel = BarrelToSet;
 }
 
+void UTankAimingComponent::SetTurretReference(UTankTurret* TurretToSet)
+{
+	Turret = TurretToSet;
+}
 
 void UTankAimingComponent::AimAt(const FVector HitLocation, const float LaunchSpeed)
 {
-	if (!Barrel) { return; }	// Stop if barrel is not set
+	if (!Barrel || !Turret) { return; }	// Stop if barrel is not set
 	FVector OutLaunchVelocity;
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));	// get socket "Projectile" in this component 
 	bool bFoundVelocity = UGameplayStatics::SuggestProjectileVelocity
@@ -36,12 +42,13 @@ void UTankAimingComponent::AimAt(const FVector HitLocation, const float LaunchSp
 	if (bFoundVelocity)
 	{
 		FVector AimDirection = OutLaunchVelocity.GetSafeNormal();
-		MoveBarrelToward(AimDirection);
+		MoveBarrelToward(AimDirection);	// move up or down
+		MoveTurretToward(AimDirection);	// move left or right
 	}
 	else
 	{
 		float Time = GetWorld()->GetTimeSeconds();
-		UE_LOG(LogTemp, Warning, TEXT("%f: No AIM SOLUTION FOUND"), Time);
+		//UE_LOG(LogTemp, Warning, TEXT("%f: No AIM SOLUTION FOUND"), Time);
 	}
 	// Do nothing if not found
 }
@@ -53,8 +60,22 @@ void UTankAimingComponent::MoveBarrelToward(FVector AimDirection)
 	FRotator AimAsRotator = AimDirection.Rotation();
 	FRotator DeltaRotator = AimAsRotator - BarrelRotation;
 	
-	Barrel->Elevate(5);		//TODO REMOVE MAGIC NUMBER
+	Barrel->Elevate(DeltaRotator.Pitch);		
 }
 
 
-
+void UTankAimingComponent::MoveTurretToward(FVector AimDirection)
+{
+	FRotator TurretRotation = Turret->GetRightVector().Rotation();
+	FRotator AimAsRotator = AimDirection.Rotation();
+	FRotator DeltaRotator = AimAsRotator - TurretRotation;
+	
+	if (FMath::Abs<float>(DeltaRotator.Yaw))
+	{
+		Turret->Rotate(DeltaRotator.Yaw);	
+	}
+	else
+	{
+		Turret->Rotate(-DeltaRotator.Yaw);
+	}
+}

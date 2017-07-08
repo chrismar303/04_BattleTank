@@ -4,10 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "TankTurret.h"
 #include "Tank.generated.h"
 
 // FORWARD DECLARATIONS
 class UTankBarrel;
+//class UTankTurrret;
 class UTankAimingComponent;
 
 UCLASS()
@@ -20,8 +22,11 @@ public:
 	ATank();
 	void AimAt(const FVector HitLocation);
 
-	UFUNCTION(BlueprintCallable, Category=Setup)
+	UFUNCTION(BlueprintCallable, Category = Setup)
 	void SetBarrelReference(UTankBarrel* BarrelToSet);
+
+	UFUNCTION(BlueprintCallable, Category = Setup)
+	void SetTurretReference(UTankTurret* TurretToSet);
 
 protected:
 	// Called when the game starts or when spawned
