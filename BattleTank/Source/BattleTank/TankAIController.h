@@ -4,9 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
-#include "Tank.h"
-#include "GameFramework/Actor.h"
+
 #include "TankAIController.generated.h"
+
+// Forward Declarations
+class ATank;
+class AActor;
 
 /**
  * 
