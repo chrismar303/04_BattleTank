@@ -4,12 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
-#include "TankTurret.h"
 #include "Tank.generated.h"
 
 // FORWARD DECLARATIONS
 class UTankBarrel;
-//class UTankTurrret;
+class UTankTurrret;
 class UTankAimingComponent;
 
 UCLASS()
@@ -36,7 +35,7 @@ protected:
 	UTankAimingComponent* TankAimingComponent = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = Firing)
-	float LaunchSpeed = 100000;	// TODO FIND Sensible Starting Value IN Meters per seconds
+	float LaunchSpeed = 4000.0f;	// Sensible Starting Value IN Meters per seconds
 
 private:	
 	// Called to bind functionality to input

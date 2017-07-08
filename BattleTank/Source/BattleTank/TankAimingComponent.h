@@ -20,16 +20,18 @@ public:
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 
+	// Prepares Barrel to be used
 	void SetBarrelReference(UTankBarrel* BarrelToSet);
-	
 	// Prepares Turret to be used
 	void SetTurretReference(UTankTurret* TurretToSet);
 
+	// Position Tank to location
 	void AimAt(FVector HitLocation, const float LaunchSpeed);
-	void MoveBarrelToward(const FVector AimDirection);
-	void MoveTurretToward(const FVector AimDirection);
+
 
 private:
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
+
+	void MoveBarrelToward(const FVector AimDirection);
 };
