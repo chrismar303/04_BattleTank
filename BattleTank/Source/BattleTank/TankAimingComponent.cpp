@@ -4,6 +4,7 @@
 #include "GameFramework/Actor.h"
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "TankBarrel.h"
 
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
@@ -13,43 +14,40 @@ UTankAimingComponent::UTankAimingComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
-void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent* BarrelToSet)
+void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
 {
 	Barrel = BarrelToSet;
 }
 
 
-// Called when the game starts
-void UTankAimingComponent::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
-// Called every frame
-void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-}
-
-void UTankAimingComponent::AimAt(const FVector HitLocation, const float LaunchSpeed) const
+void UTankAimingComponent::AimAt(const FVector HitLocation, const float LaunchSpeed)
 {
 	if (!Barrel) { return; }	// Stop if barrel is not set
 	FVector OutLaunchVelocity;
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));	// get socket "Projectile" in this component 
-	bool foundVelocity = UGameplayStatics::SuggestProjectileVelocity
+	bool bFoundVelocity = UGameplayStatics::SuggestProjectileVelocity
 	(
 		this, OutLaunchVelocity,
-		StartLocation, HitLocation,
-		LaunchSpeed, false,	0.0, 0.0,
+		StartLocation, HitLocation, LaunchSpeed,
 		ESuggestProjVelocityTraceOption::DoNotTrace
 	);
-	if (foundVelocity)
+	if (bFoundVelocity)
 	{
 		FVector AimDirection = OutLaunchVelocity.GetSafeNormal();
-		FString TankLoc = GetOwner()->GetActorLocation().ToString();
-		FString TankName = GetOwner()->GetName();
-		UE_LOG(LogTemp, Warning, TEXT("T%s LOC: %s Aiming Direction: %s"), *TankName, *TankLoc, *AimDirection.ToString());
+		MoveBarrelToward(AimDirection);
+		//UE_LOG(LogTemp, Warning, TEXT("T%s LOC: %s Aiming Direction: %s"), *TankName, *TankLoc, *AimDirection.ToString());
 	}
+	// Do nothing if not found
+}
+
+void UTankAimingComponent::MoveBarrelToward(FVector AimDirection)
+{
+	// Workout difference between current barrel rotation vs desired barrel rotation
+	FRotator BarrelRotation = Barrel->GetForwardVector().Rotation();
+	FRotator AimAsRotator = AimDirection.Rotation();
+	FRotator DeltaRotator = AimAsRotator - BarrelRotation;
+	
+	Barrel->Elevate(5);		//TODO REMOVE MAGIC NUMBER
 }
 
 
