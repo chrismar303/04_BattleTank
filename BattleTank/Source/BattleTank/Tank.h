@@ -39,7 +39,7 @@ protected:
 	float LaunchSpeed = 4000.0f;	// Sensible Starting Value IN Meters per seconds
 
 	UFUNCTION(BlueprintCallable, Category = Firing)
-	void Fire() const;
+	void Fire();
 
 	UPROPERTY(EditAnywhere, Category = Setup)
 	TSubclassOf<AProjectile> ProjectileBlueprint;

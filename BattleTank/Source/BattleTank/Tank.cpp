@@ -33,15 +33,25 @@ void ATank::AimAt(const FVector HitLocation)
 	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
 }
 
-void ATank::Fire() const
+void ATank::Fire()
 {
-	UE_LOG(LogTemp, Warning, TEXT("%s is Firing!"), *GetName());
+	//UE_LOG(LogTemp, Warning, TEXT("%s is Firing!"), *GetName());
 	if (!Barrel) { return; }	// if barrel has not been set, stop!
 
 	// Spawn a projectile at Socket location
 	FVector Location = Barrel->GetSocketLocation(FName("Projectile"));
 	FRotator Rotation = Barrel->GetSocketRotation(FName("Projectile"));
-	GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, Location, Rotation);
+	AProjectile* Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, Location, Rotation);
+	if (!Projectile)
+	{
+		UE_LOG(LogTemp, Error, TEXT("PROJECTILE IS NULL"));
+	}
+	else
+	{
+		Projectile->LaunchProjectile(LaunchSpeed);
+	}
+	// Launch Projectile
+	//Projectile->LaunchProjectile(LaunchSpeed);
 }
 
 void ATank::SetBarrelReference(UTankBarrel* BarrelToSet)
