@@ -11,15 +11,8 @@ void ATankPlayerController::BeginPlay()
 	Super::BeginPlay();
 
 	ATank* tank = GetControlledTank();
-	if (tank)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("SUPER::BEGINPLAY --- %s"), *tank->GetName());
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("SUPER::BEGINPLAY --- NO POSSESSED TANK"));
-	}
-
+	if (tank) { UE_LOG(LogTemp, Warning, TEXT("SUPER::BEGINPLAY --- %s"), *tank->GetName()); }
+	else { UE_LOG(LogTemp, Error, TEXT("SUPER::BEGINPLAY --- NO POSSESSED TANK")); }
 }
 
 void ATankPlayerController::Tick(float DeltaTime)
@@ -38,7 +31,6 @@ void ATankPlayerController::AimAtCrosshairs()
 	if (!GetControlledTank()) { return; }
 
 	FVector HitLocation;	// Out parameter
-	
 	// if it hits landscape
 	if (GetSightRayHitLocation(HitLocation))	// "side-effect" Will Ray Trace
 	{
@@ -62,10 +54,8 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) cons
 		// Line-Trace along LookDirection, and see what we hit (up to max range)
 		GetLookVectorHitLocation(LookDirection, OutHitLocation);
 	}
-
 	return true;
 }
-
 
 bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection) const
 {
