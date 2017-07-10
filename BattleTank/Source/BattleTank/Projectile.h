@@ -9,7 +9,6 @@
 // Forward Declaration
 class UProjectileMovementComponent;
 
-
 UCLASS()
 class BATTLETANK_API AProjectile : public AActor
 {
@@ -18,18 +17,15 @@ class BATTLETANK_API AProjectile : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AProjectile();
-
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
 	// Handles projectile movement
 	UProjectileMovementComponent* ProjectileMovement = nullptr;
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
+	// Launches the projectile
 	void LaunchProjectile(float Speed);
-	
 };

@@ -28,7 +28,6 @@ public:
 	// Position Tank to location
 	void AimAt(FVector HitLocation, const float LaunchSpeed);
 
-
 private:
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;

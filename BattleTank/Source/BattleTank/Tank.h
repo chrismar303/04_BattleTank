@@ -38,10 +38,16 @@ protected:
 	// Delegates aiming
 	UTankAimingComponent* TankAimingComponent = nullptr;
 
-	UPROPERTY(EditAnywhere, Category = Firing)
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	float LaunchSpeed = 4000.0f;	// Sensible Starting Value IN Meters per seconds
 
-	UPROPERTY(EditAnywhere, Category = Setup)
+	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	// Limits firing rate
+	float ReloadTime = 3.0f;
+	// Last time projectile was fired
+	double LastReloadTime = 0.0f;
+
+	UPROPERTY(EditDefaultsOnly, Category = Setup)
 	TSubclassOf<AProjectile> ProjectileBlueprint;
 
 	// Local Barrel Reference for spawning projectile 
@@ -50,10 +56,4 @@ protected:
 private:	
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	UPROPERTY(EditAnywhere, Category = Firing)
-	// Limits firing rate
-	float ReloadTime = 3.0f;	
-	// Last time projectile was fired
-	double LastReloadTime = 0.0f;	
 };
