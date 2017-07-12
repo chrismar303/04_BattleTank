@@ -11,6 +11,7 @@ class UTankBarrel;
 class UTankTurrret;
 class UTankAimingComponent;
 class AProjectile;
+class UTankMovementComponent;
 
 UCLASS()
 class BATTLETANK_API ATank : public APawn
@@ -37,6 +38,10 @@ protected:
 
 	// Delegates aiming
 	UTankAimingComponent* TankAimingComponent = nullptr;
+
+	// Delegates Movement
+	UPROPERTY(BlueprintReadOnly)
+	UTankMovementComponent* TankMovementComponent = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	float LaunchSpeed = 4000.0f;	// Sensible Starting Value IN Meters per seconds
