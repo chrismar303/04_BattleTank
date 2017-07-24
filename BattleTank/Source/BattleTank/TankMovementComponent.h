@@ -1,5 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
+// Copyright @ 2017 C-Tech Studios
 #pragma once
 
 #include "CoreMinimal.h"
@@ -19,17 +18,21 @@ class BATTLETANK_API UTankMovementComponent : public UNavMovementComponent
 	
 public:
 	// Initializes Tracks for use in Tank Movement Component
-	UFUNCTION(BlueprintCallable, Category = Setup)
+	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Initialize(UTankTrack* LeftTrackToSet, UTankTrack* RightTrackToSet);
 
 	// Causes Forward Movement
-	UFUNCTION(BlueprintCallable, Category = Input)
+	UFUNCTION(BlueprintCallable, Category = "Input")
 	void IntendMoveForward(float Throw);
 
 	// Causes Sideways Movement
-	UFUNCTION(BlueprintCallable, Category = Input)
-	void IntendMoveRight(float Throw);
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	void IntendMoveTurn(float Throw);
+
 private:
 	UTankTrack* LeftTrack = nullptr;
 	UTankTrack* RightTrack = nullptr;
+
+	// Called from the pathfinding logic from AI Controlelr
+	virtual void RequestDirectMove(const FVector& MoveVelocity, bool bForceMaxSpeed) override;
 };

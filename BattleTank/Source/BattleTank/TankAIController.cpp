@@ -5,6 +5,7 @@
 #include "GameFramework/Actor.h"
 #include "Engine/World.h"
 #include "GameFramework/PlayerController.h"
+#include "GameFramework/NavMovementComponent.h"
 
 
 void ATankAIController::BeginPlay()
@@ -22,6 +23,7 @@ void ATankAIController::Tick(float DeltaTime)
 	// Grab AI Tank
 	ATank* ControlledTank = GetControlledTank();
 	// TODO Move Towards Player
+	MoveToActor(PlayerTank, AcceptanceRadius);	// TODO find out if in cm or m
 
 	// Aim Towards Player
 	ControlledTank->AimAt(PlayerTank->GetActorLocation());

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "GameFramework/NavMovementComponent.h"
 #include "TankAimingComponent.generated.h"
 
 // FORWARD DECLARATION

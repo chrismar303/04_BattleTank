@@ -8,6 +8,7 @@
 #include "TankBarrel.h"
 #include "TankTurret.h"
 #include "Engine/World.h"
+#include "DrawDebugHelpers.h"
 
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
@@ -45,6 +46,8 @@ void UTankAimingComponent::AimAt(const FVector HitLocation, const float LaunchSp
 	{
 		FVector AimDirection = OutLaunchVelocity.GetSafeNormal();
 		MoveBarrelToward(AimDirection);	
+		FColor Color(255, 20, 147);
+		DrawDebugLine(GetWorld(), StartLocation, HitLocation, Color, false, -1.0f, (uint8)'\000', 105.0f);
 	}
 	// Do nothing if not found
 }
